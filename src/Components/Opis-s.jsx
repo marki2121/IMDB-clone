@@ -21,7 +21,7 @@ const OpisSer = () => {
     let check = false;
 
     for (var i = 0; i < favorite.length; i++) {
-      if (favorite[i] == serija.id) {
+      if (favorite[i] === serija.id) {
         check = true;
         setIndex((index) => index.filter((_, index) => index !== i));
         setFavorite((favorite) =>
@@ -32,7 +32,7 @@ const OpisSer = () => {
       }
     }
 
-    if (check == false) {
+    if (check === false) {
       setColor("yellow");
       setIndex((index) => [...index, 2]);
       setFavorite((favorite) => [...favorite, serija.id]);
