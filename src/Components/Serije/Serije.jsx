@@ -18,7 +18,7 @@ const Serije = (props) => {
       apiServices.getSeries(search)
       .then((data) => setSerije(data));
     }
-  }, []);
+  }, [search]);
 
   return (
     <div className="container">
