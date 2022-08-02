@@ -6,7 +6,7 @@ import { UserContext, IndexContex } from "../Context/contexts";
 import { apiServices } from "../Services/API/rest";
 
 const Opis = () => {
-  const id = useParams();
+  const idUrl= useParams();
   const [film, setFilm] = useState([]);
   const [color, setColor] = useState("white");
   const [favorite, setFavorite] = useContext(UserContext);
@@ -16,7 +16,7 @@ const Opis = () => {
     let check = false;
 
     for (let i = 0; i < favorite.length; i++) {
-      if (favorite[i] == film.id) {
+      if (favorite[i] === film.id) {
         check = true;
         setIndex((index) => index.filter((_, index) => index !== i));
         setFavorite((favorite) =>
@@ -27,7 +27,7 @@ const Opis = () => {
       }
     }
 
-    if (check == false) {
+    if (check === false) {
       setColor("yellow");
       setIndex((index) => [...index, 1]);
       setFavorite((favorite) => [...favorite, film.id]);
@@ -36,7 +36,7 @@ const Opis = () => {
 
   function checkColor() {
     for (let i = 0; i < favorite.length; i++) {
-      if (favorite[i] == film.id) {
+      if (favorite[i] === film.id) {
         setColor("yellow");
         break;
       }
@@ -44,7 +44,7 @@ const Opis = () => {
   }
 
   useEffect(() => {
-    apiServices.getDataMovie(id.id)
+    apiServices.getDataMovie(idUrl.id)
     .then((data) => setFilm(data));
   }, []);
 
@@ -74,7 +74,7 @@ const Opis = () => {
               width="16"
               height="16"
               fill="currentColor"
-              class="bi bi-star"
+              className="bi bi-star"
               viewBox="0 0 16 16"
               style={{ color: color }}
               onClick={addFavorite}

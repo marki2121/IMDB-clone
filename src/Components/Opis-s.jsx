@@ -6,7 +6,7 @@ import { UserContext, IndexContex } from "../Context/contexts";
 import { apiServices } from "../Services/API/rest";
 
 const OpisSer = () => {
-  const id = useParams();
+  const idUrl = useParams();
   const [serija, setSerija] = useState([]);
   const [color, setColor] = useState("white");
   const [favorite, setFavorite] = useContext(UserContext);
@@ -36,7 +36,7 @@ const OpisSer = () => {
 
   function checkColor() {
     for (let i = 0; i < favorite.length; i++) {
-      if (favorite[i] == serija.id) {
+      if (favorite[i] === serija.id) {
         setColor("yellow");
         break;
       }
@@ -44,8 +44,7 @@ const OpisSer = () => {
   }
 
   useEffect(() => {
-    apiServices.getDataTV(id.id)
-    .then((data) => setSerija(data));
+    apiServices.getDataTV(idUrl.id).then((data) => setSerija(data));
   }, []);
 
   useEffect(() => {
@@ -69,11 +68,9 @@ const OpisSer = () => {
           <div className="data">
             <h2> {serija.name} </h2>
             <h3>
-              <h3>
-                {" "}
-                {serija.first_air_date} _{" "}
-                {serija.in_production === true ? "..." : serija.last_air_date}{" "}
-              </h3>
+              {" "}
+              {serija.first_air_date} _{" "}
+              {serija.in_production === true ? "..." : serija.last_air_date}{" "}
             </h3>
             <button>
               <svg
@@ -81,7 +78,7 @@ const OpisSer = () => {
                 width="16"
                 height="16"
                 fill="currentColor"
-                class="bi bi-star"
+                className="bi bi-star"
                 viewBox="0 0 16 16"
                 style={{ color: color }}
                 onClick={addFavorite}

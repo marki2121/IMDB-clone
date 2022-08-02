@@ -2,57 +2,40 @@ import React, { useContext } from "react";
 import {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 
-import { TypeContex } from "../../Context/contexts";
+import { TypeContex, SearchContext } from "../../Context/contexts";
 
 import { apiServices } from '../../Services/API/rest';
+import FilmMapper from "./FilmMapper";
 
-const Filmovi = (props) => {
+const Filmovi = () => {
     const [movies, setMovies] = useState([]);
     const [type, ] = useContext(TypeContex);
+    const [search, ] = useContext(SearchContext);
 
     useEffect(() => {
-        if(props.input === undefined && type === undefined) {
+        if(search === "" && type === "") {
             apiServices.getBestMovies()
             .then((data) => setMovies(data));
 
-        } else if(props.input === undefined && type != undefined)  {
+        } else if(search === "" && type !== "")  {
             apiServices.getBestMoviesType(type)
             .then((data) => setMovies(data));
 
-        } else if(type != undefined && props.input != undefined) {
-            apiServices.getMoviesType(props.input, type)
+        } else if(type !== "" && search !== "") {
+            apiServices.getMoviesType(search, type)
             .then((data) => setMovies(data));
 
         } else {
-            apiServices.getMovies(props.input)
+            apiServices.getMovies(search)
             .then((data) => setMovies(data));
 
         }
-    }, [props, type]);
+
+    }, [search, type]);
 
     return(
         <div className="container">
-            {movies.length > 0 ? (
-            <>
-                {movies.map((movie) => (
-                    <Link to={`filmovi/${movie.id}`} className="linkNo"> 
-                    <div className="card" key={movie.id}>
-
-                            <img src={movie.poster_path !== "null" ?  `https://image.tmdb.org/t/p/w400/${movie.poster_path}` : "https://via.placeholder.com/400"} alt={movie.title} />
-                            <p>{movie.release_date}</p>
-                            <div className="podatci">
-                                <span>Movie</span>
-                                <h3>{movie.title}</h3>
-                            </div>
-                    </div>
-                    </Link>
-                    ))}
-            </>
-            ) : (
-            <div>
-                <h1>No movies found</h1>        
-            </div>
-            )}
+            <FilmMapper movies={movies} />
         </div>
     )
 }
