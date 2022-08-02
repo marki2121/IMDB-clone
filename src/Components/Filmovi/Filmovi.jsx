@@ -1,54 +1,32 @@
 import React, { useContext } from "react";
 import {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
-import { TypeContex } from "../../App";
+
+import { TypeContex } from "../../Context/contexts";
+
+import { apiServices } from '../../Services/API/rest';
 
 const Filmovi = (props) => {
     const [movies, setMovies] = useState([]);
-    const [counter, setCounter] = useState(1);
     const [type, ] = useContext(TypeContex);
-
-    const GetBestMovies = async () => {
-        const require = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=eb44ee80df76c8e88bc09021aa1168dd&language=en-US&page=${counter}`);
-        const data = await require.json();
-    
-        setMovies(data.results);
-        console.log("1");
-    }
-
-    const GetBestMoviesType = async () => {
-        const require = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=eb44ee80df76c8e88bc09021aa1168dd&language=en-US&page=${counter}&with_genres=${type}`);
-        const data = await require.json();
-    
-        setMovies(data.results);
-        console.log("2");
-    }
-
-    const GetMovies = async (title) => {
-        const require = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=eb44ee80df76c8e88bc09021aa1168dd&language=en-US&query=${title}&page=1&include_adult=false`);
-        const data = await require.json();
-    
-        setMovies(data.results);
-        console.log("3");
-    }
-
-    const GetMoviesType = async (title) => {
-        const require = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=eb44ee80df76c8e88bc09021aa1168dd&language=en-US&query=${title}&page=1&include_adult=false&with_genres=${type}`);
-        const data = await require.json();
-    
-        setMovies(data.results);
-        console.log("4");
-    }
 
     useEffect(() => {
         if(props.input === undefined && type === undefined) {
-            GetBestMovies();
+            apiServices.getBestMovies()
+            .then((data) => setMovies(data));
+
         } else if(props.input === undefined && type != undefined)  {
-            GetBestMoviesType();
-        }else if(type === undefined && props.input != undefined) {
-            GetMoviesType();
+            apiServices.getBestMoviesType(type)
+            .then((data) => setMovies(data));
+
+        } else if(type != undefined && props.input != undefined) {
+            apiServices.getMoviesType(props.input, type)
+            .then((data) => setMovies(data));
+
         } else {
-            GetMovies(props.input);
+            apiServices.getMovies(props.input)
+            .then((data) => setMovies(data));
+
         }
     }, [props, type]);
 

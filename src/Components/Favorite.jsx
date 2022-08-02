@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
-import { IndexContex, UserContext } from "../App";
+import { IndexContex, UserContext } from "../Context/contexts";
 
 import { Link } from "react-router-dom";
+import { apiServices } from "../Services/API/rest";
 
 const Favoriti = () => {
   const [movies, setMovies] = useState([]);
@@ -9,32 +10,16 @@ const Favoriti = () => {
   const [index] = useContext(IndexContex);
   const [favorite] = useContext(UserContext);
   let isCalled = false;
- 
-  const GetMovies = async (id) => {
-    const request = await fetch(
-      `https://api.themoviedb.org/3/movie/${id}?api_key=eb44ee80df76c8e88bc09021aa1168dd&language=en-US`
-    );
-    const data = await request.json();
-
-    setMovies((movies) => [...movies, data]);
-  };
-
-  const GetSeries = async (id) => {
-    const request = await fetch(
-      `https://api.themoviedb.org/3/tv/${id}?api_key=eb44ee80df76c8e88bc09021aa1168dd&language=en-US`
-    );
-    const data = await request.json();
-
-    setSerie((serije) => [...serije, data]);
-  };
 
   function GetData() {
     isCalled = true;
     for (var i = 0; i < favorite.length; i++) {
         if (index[i] === 1) {
-          GetMovies(favorite[i]);
+          apiServices.getDataMovie(favorite[i])
+          .then((data) => setMovies((movies) => [...movies, data]));
         } else if (index[i] === 2) {
-          GetSeries(favorite[i]);
+          apiServices.getDataTV(favorite[i])
+          .then((data) => setSerie((serije) => [...serije, data]));
         } else {
           console.log("error");
         }

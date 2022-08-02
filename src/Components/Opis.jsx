@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React from "react";
 
-import { UserContext, IndexContex } from "../App";
+import { useParams } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import { UserContext, IndexContex } from "../Context/contexts";
+import { apiServices } from "../Services/API/rest";
 
 const Opis = () => {
   const id = useParams();
@@ -14,7 +15,7 @@ const Opis = () => {
   function addFavorite() {
     let check = false;
 
-    for (var i = 0; i < favorite.length; i++) {
+    for (let i = 0; i < favorite.length; i++) {
       if (favorite[i] == film.id) {
         check = true;
         setIndex((index) => index.filter((_, index) => index !== i));
@@ -34,7 +35,7 @@ const Opis = () => {
   }
 
   function checkColor() {
-    for (var i = 0; i < favorite.length; i++) {
+    for (let i = 0; i < favorite.length; i++) {
       if (favorite[i] == film.id) {
         setColor("yellow");
         break;
@@ -42,17 +43,9 @@ const Opis = () => {
     }
   }
 
-  const GetData = async () => {
-    const request = await fetch(
-      `https://api.themoviedb.org/3/movie/${id.id}?api_key=eb44ee80df76c8e88bc09021aa1168dd&language=en-US`
-    );
-    const data = await request.json();
-
-    setFilm(data);
-  };
-
   useEffect(() => {
-    GetData();
+    apiServices.getDataMovie(id.id)
+    .then((data) => setFilm(data));
   }, []);
 
   useEffect(() => {

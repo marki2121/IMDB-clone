@@ -2,7 +2,7 @@ import "./App.css";
 import Dropdown from "react-bootstrap/Dropdown";
 
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
-import { useState, createContext, useEffect } from "react";
+import { useState } from "react";
 
 import Filmovi from "./Components/Filmovi/Filmovi";
 import Serije from "./Components/Serije/Serije";
@@ -10,12 +10,7 @@ import Opis from "./Components/Opis";
 import OpisSer from "./Components/Opis-s";
 import Favoriti from "./Components/Favorite";
 
-// themoviedb key: eb44ee80df76c8e88bc09021aa1168dd
-// popular https://api.themoviedb.org/3/movie/popular?api_key=eb44ee80df76c8e88bc09021aa1168dd&language=en-US&page=1
-
-export const UserContext = createContext();
-export const IndexContex = createContext();
-export const TypeContex = createContext();
+import { UserContext, IndexContex, TypeContex } from './Context/contexts';
 
 function App() {
   const [search, setSearch] = useState();

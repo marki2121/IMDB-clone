@@ -1,26 +1,21 @@
 import React from "react";
+
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
-import { UserContext, IndexContex } from "../App";
+import { UserContext, IndexContex } from "../Context/contexts";
+import { apiServices } from "../Services/API/rest";
 
 const OpisSer = () => {
   const id = useParams();
-  const [serija, setserija] = useState([]);
+  const [serija, setSerija] = useState([]);
   const [color, setColor] = useState("white");
   const [favorite, setFavorite] = useContext(UserContext);
   const [, setIndex] = useContext(IndexContex);
 
-  const Datum = {
-    position: "absolute",
-    top: "18%",
-    left: "26.5%",
-    margin: "3rem",
-  };
-
   function addFavorite() {
     let check = false;
 
-    for (var i = 0; i < favorite.length; i++) {
+    for (let i = 0; i < favorite.length; i++) {
       if (favorite[i] === serija.id) {
         check = true;
         setIndex((index) => index.filter((_, index) => index !== i));
@@ -40,7 +35,7 @@ const OpisSer = () => {
   }
 
   function checkColor() {
-    for (var i = 0; i < favorite.length; i++) {
+    for (let i = 0; i < favorite.length; i++) {
       if (favorite[i] == serija.id) {
         setColor("yellow");
         break;
@@ -48,17 +43,9 @@ const OpisSer = () => {
     }
   }
 
-  const GetData = async () => {
-    const request = await fetch(
-      `https://api.themoviedb.org/3/tv/${id.id}?api_key=eb44ee80df76c8e88bc09021aa1168dd&language=en-US`
-    );
-    const data = await request.json();
-
-    setserija(data);
-  };
-
   useEffect(() => {
-    GetData();
+    apiServices.getDataTV(id.id)
+    .then((data) => setSerija(data));
   }, []);
 
   useEffect(() => {

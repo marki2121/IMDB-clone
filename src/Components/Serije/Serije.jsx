@@ -1,36 +1,22 @@
 import React from "react";
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+
+import { apiServices } from "../../Services/API/rest";
 
 // eb44ee80df76c8e88bc09021aa1168dd
 
 const Serije = (props) => {
   const [serije, setSerije] = useState([]);
 
-  const GetBestserije = async () => {
-    const require = await fetch(
-      "https://api.themoviedb.org/3/tv/popular?api_key=eb44ee80df76c8e88bc09021aa1168dd&language=en-US&page=1"
-    );
-    const data = await require.json();
-
-    setSerije(data.results);
-  };
-
-  const GetSerije = async (serija) => {
-    const request = await fetch(
-      `https://api.themoviedb.org/3/search/tv?api_key=eb44ee80df76c8e88bc09021aa1168dd&language=en-US&page=1&query=${serija}&include_adult=false`
-    );
-    const data = await request.json();
-
-    setSerije(data.results);
-  };
-
   useEffect(() => {
-    console.log(props);
     if (props.input === undefined) {
-      GetBestserije();
+      apiServices.getBestSeries()
+      .then((data) => setSerije(data));
     } else {
-      GetSerije(props.input);
+      apiServices.getSeries(props.input)
+      .then((data) => setSerije(data));
     }
   }, []);
 
